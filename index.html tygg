@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وادي الذئاب | منصة الأسطورة</title>
+    <!-- ربط خطوط جوجل الفخمة وخطوط الأيقونات -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- خلفية سينمائية علوية (Hero Section) -->
+    <header class="hero">
+        <div class="overlay"></div>
+        <div class="hero-content">
+            <span class="badge"><i class="fas fa-fire"></i> الأكثر طلبًا</span>
+            <h1>وادي الذئاب</h1>
+            <p class="story">المسلسل الدرامي السياسي المشوق الذي يروي قصة "مراد علمدار" ورحلته في القضاء على المافيا والعمليات السرية لحماية الدولة.</p>
+            <div class="hero-buttons">
+                <a href="#episodes" class="btn-play"><i class="fas fa-play"></i> شاهد الآن</a>
+                <button class="btn-fav" onclick="toggleFavoriteHero()"><i class="far fa-heart"></i> إضافة للمفضلة</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- قسم الحلقات والتبويبات -->
+    <main class="container" id="episodes">
+        <div class="section-header">
+            <h2><i class="fas fa-film text-danger"></i> حلقات الجزء الأول</h2>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInp" onkeyup="searchEpisodes()" placeholder="ابحث عن حلقة...">
+            </div>
+        </div>
+
+        <!-- شبكة عرض الحلقات -->
+        <div class="episodes-grid">
+            
+            <!-- كارت الحلقة 1 -->
+            <div class="card" data-title="الحلقة 1 الأولى">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500" alt="الحلقة 1">
+                    <div class="play-hover"><i class="fas fa-play-circle"></i></div>
+                    <span class="duration">45 دقيقة</span>
+                </div>
+                <div class="card-body">
+                    <h3>الحلقة 1: البداية واللقاء الأول</h3>
+                    <p>بداية دخول علي جندان إلى عالم المافيا بشخصيته الجديدة: مراد علمدار.</p>
+                    <button class="btn-watch" onclick="watchVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">عرض الحلقة</button>
+                </div>
+            </div>
+
+            <!-- كارت الحلقة 2 -->
+            <div class="card" data-title="الحلقة 2 الثانية">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=500" alt="الحلقة 2">
+                    <div class="play-hover"><i class="fas fa-play-circle"></i></div>
+                    <span class="duration">50 دقيقة</span>
+                </div>
+                <div class="card-body">
+                    <h3>الحلقة 2: مجلس السكاكين</h3>
+                    <p>اجتماع البارون محمد الكراخانلي مع أعضاء المجلس السري للمافيا.</p>
+                    <button class="btn-watch" onclick="watchVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">عرض الحلقة</button>
+                </div>
+            </div>
+
+            <!-- كارت الحلقة 3 -->
+            <div class="card" data-title="الحلقة 3 الثالثة">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=500" alt="الحلقة 3">
+                    <div class="play-hover"><i class="fas fa-play-circle"></i></div>
+                    <span class="duration">48 دقيقة</span>
+                </div>
+                <div class="card-body">
+                    <h3>الحلقة 3: سليمان شاكر في الميدان</h3>
+                    <p>مواجهة قوية لشاكر في الشارع يتدخل فيها مراد علمدار لإنقاذه.</p>
+                    <button class="btn-watch" onclick="watchVideo('https://www.youtube.com/embed/dQw4w9WgXcQ')">عرض الحلقة</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- شاشة منبثقة ذكية لمشاهدة الفيديو (Video Modal) -->
+    <div class="video-modal" id="videoModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeVideo()">&times;</span>
+            <div class="iframe-container">
+                <iframe id="videoPlayer" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- تذييل الصفحة -->
+    <footer>
+        <p>تم التطوير بكل هيبة وفخر | عُشاق مراد علمدار &copy; 2026</p>
+    </footer>
+
+    <!-- الكود التفاعلي لربط العمليات (JavaScript) -->
+    <script>
+        // دالة تشغيل الفيديو داخل الـ Modal السينمائي
+        function watchVideo(url) {
+            document.getElementById('videoPlayer').src = url;
+            document.getElementById('videoModal').classList.add('active');
+        }
+
+        // دالة إغلاق الفيديو
+        function closeVideo() {
+            document.getElementById('videoModal').classList.remove('active');
+            document.getElementById('videoPlayer').src = "";
+        }
+
+        // دالة البحث الذكي الفوري عن الحلقات
+        function searchEpisodes() {
+            let input = document.getElementById('searchInp').value.toLowerCase();
+            let cards = document.getElementsByClassName('card');
+            
+            for (let i = 0; i < cards.length; i++) {
+                let title = cards[i].getAttribute('data-title').toLowerCase();
+                if (title.includes(input)) {
+                    cards[i].style.display = "block";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        // دالة زر المفضلة التفاعلي
+        function toggleFavoriteHero() {
+            let btn = document.querySelector('.btn-fav');
+            btn.innerHTML = `<i class="fas fa-heart text-danger"></i> مضاف للمفضلة!`;
+            btn.style.background = "rgba(229, 9, 20, 0.2)";
+        }
+    </script>
+</body>
+</html>
