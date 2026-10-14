@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>المساعد السيبراني</title>
+<style>
+:root{--bg:#030806;--panel:rgba(5,14,10,.82);--green:#00ff6a;--red:#ff2a3d;--text:#cfeedd;--muted:#6f9482;--border:rgba(0,255,106,.35);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#030806}}
+:root[data-theme="dark"]{--bg:#030806}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans Arabic",Tahoma,Arial,sans-serif;overflow:hidden}
+#rain{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+body:after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at center,transparent 30%,rgba(0,0,0,.85) 100%),repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px)}
+.screen{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px}
+#chatScr{display:none;justify-content:flex-start;padding:0}
+.card{width:100%;max-width:420px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:26px 22px;text-align:center;box-shadow:0 0 30px rgba(0,255,106,.18),inset 0 0 25px rgba(255,42,61,.06);backdrop-filter:blur(4px)}
+.logo{font-size:2rem;letter-spacing:0;margin:0;color:var(--green);text-shadow:0 0 14px rgba(0,255,106,.6);font-weight:700;animation:glitch 3.5s infinite}
+@keyframes glitch{0%,92%,100%{transform:none}93%{transform:translate(2px,-1px)}95%{transform:translate(-3px,1px)}97%{transform:translate(2px,2px)}}
+.tag{color:var(--red);font-size:.78rem;margin:6px 0 20px;letter-spacing:0}
+label{display:block;margin-bottom:10px;line-height:1.7}
+select,textarea{width:100%;background:#020a06;color:var(--green);border:1px solid var(--border);border-radius:10px;padding:12px;font:inherit;font-size:1rem;outline:none}
+select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 10px rgba(0,255,106,.4)}
+.btn{margin-top:16px;width:100%;background:transparent;color:var(--green);border:1px solid var(--green);border-radius:10px;padding:12px;font:inherit;font-weight:700;font-size:1rem;cursor:pointer;transition:.2s}
+.btn:hover:not(:disabled){background:var(--green);color:#001a0c;box-shadow:0 0 18px var(--green)}
+.btn:disabled{opacity:.4}
+header{width:100%;display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--panel);border-bottom:1px solid var(--border)}
+.av{width:38px;height:38px;border-radius:50%;border:1px solid var(--green);display:grid;place-items:center;color:var(--green);font-weight:700;box-shadow:0 0 10px rgba(0,255,106,.5)}
+header b{display:block}header small{color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);display:inline-block;margin-inline-end:5px;animation:bl 1.4s infinite}
+@keyframes bl{50%{opacity:.25}}
+#back{margin-inline-start:auto;background:none;border:1px solid var(--red);color:var(--red);border-radius:8px;padding:5px 10px;font:inherit;font-size:.8rem;cursor:pointer}
+#chat{flex:1;width:100%;max-width:760px;overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:10px 14px;border-radius:12px;overflow-wrap:anywhere;font-size:.95rem;line-height:1.7}
+.bot{align-self:flex-start;background:rgba(0,40,20,.75);border:1px solid var(--border)}
+.me{align-self:flex-end;background:rgba(60,0,8,.75);border:1px solid rgba(255,42,61,.5)}
+.msg pre,.msg code{font-family:"Courier New",ui-monospace,monospace}
+.msg pre{direction:ltr;text-align:left;background:#000;color:var(--green);padding:10px;border-radius:8px;overflow-x:auto;font-size:.82rem;margin:8px 0;border:1px solid var(--border)}
+.msg code{direction:ltr;unicode-bidi:embed;background:rgba(0,255,106,.12);padding:1px 5px;border-radius:4px}
+.msg pre code{background:none;padding:0}
+#bar{width:100%;max-width:760px;display:flex;gap:8px;padding:10px 14px 14px}
+#bar textarea{resize:none;max-height:120px}
+#send{background:var(--green);color:#001a0c;border:0;border-radius:10px;padding:0 18px;font:inherit;font-weight:700;cursor:pointer}
+#send:disabled{opacity:.4}
+</style>
+</head>
+<body>
+<canvas id="rain"></canvas>
+
+<div class="screen" id="pick">
+  <div class="card">
+    <h1 class="logo">المساعد السيبراني<br><span style="font-size:1.1rem;letter-spacing:.12em">CYBER ASSISTANT</span></h1>
+    <p class="tag">&gt; أمّن · تعلّم · دافع &nbsp;|&nbsp; Secure · Learn · Defend_</p>
+    <label for="who">منو تحب يجاوبك؟<br><span style="color:var(--muted);font-size:.9rem">Who would you like to answer you?</span></label>
+    <select id="who">
+      <option value="" disabled selected>— اختر | Choose —</option>
+      <option value="أيمن|Ayman">أيمن | Ayman</option>
+      <option value="بهاء|Bahaa">بهاء | Bahaa</option>
+      <option value="إيناس|Enas">إيناس | Enas</option>
+      <option value="فاطمة|Fatima">فاطمة | Fatima</option>
+      <option value="شمس|Shams">شمس | Shams</option>
+    </select>
+    <button class="btn" id="enter" disabled>دخول | Enter</button>
+  </div>
+</div>
+
+<div class="screen" id="chatScr">
+  <header>
+    <div class="av" id="av">?</div>
+    <div><b id="nm"></b><small><span class="dot"></span>online</small></div>
+    <button id="back">↩</button>
+  </header>
+  <div id="chat"></div>
+  <div id="bar">
+    <textarea id="q" rows="1" dir="auto" placeholder="اكتب سؤالك..."></textarea>
+    <button id="send">&gt;</button>
+  </div>
+</div>
+
+<script>
+// ---------- Matrix rain ----------
+const cv=document.getElementById('rain'),cx=cv.getContext('2d');
+const CH='01ABCDEF0123456789<>{}[]/\\#$%&*+=ｱｲｳｴｵｶｷｸｹｺ'.split('');
+let cols,drops,fs=16;
+function sizeRain(){cv.width=innerWidth;cv.height=innerHeight;cols=Math.ceil(cv.width/fs);drops=Array.from({length:cols},()=>Math.random()*-50)}
+sizeRain();addEventListener('resize',sizeRain);
+function rain(){
+  cx.fillStyle='rgba(3,8,6,.09)';cx.fillRect(0,0,cv.width,cv.height);
+  cx.font=fs+'px monospace';
+  for(let i=0;i<cols;i++){
+    const red=(i*7919)%11===0;
+    cx.fillStyle=red?'#ff2a3d':'#00ff6a';
+    cx.globalAlpha=red?.85:.7;
+    cx.fillText(CH[Math.random()*CH.length|0],i*fs,drops[i]*fs);
+    if(drops[i]*fs>cv.height&&Math.random()>.975)drops[i]=0;
+    drops[i]+=.6;
+  }
+  cx.globalAlpha=1;
+}
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(rain,55);
+
+// ---------- Persona + chat ----------
+const $=id=>document.getElementById(id);
+const who=$('who'),enter=$('enter'),chatEl=$('chat'),q=$('q'),sendBtn=$('send');
+const T=(a,e)=>/[\u0600-\u06FF]/.test(q.value||lastText)?a:e;let lastText='';
+let persona=null,history=[],sample=null,busy=false;
+
+who.onchange=()=>enter.disabled=!who.value;
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function render(t){return t.split('```').map((p,i)=>i%2?'<pre><code>'+esc(p.replace(/^[a-zA-Z0-9+#-]*\n/,''))+'</code></pre>':esc(p).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>')).join('')}
+function add(role,text){const d=document.createElement('div');d.className='msg '+(role==='user'?'me':'bot');d.dir='auto';role==='user'?d.textContent=text:d.innerHTML=render(text);chatEl.appendChild(d);chatEl.scrollTop=chatEl.scrollHeight;return d}
+
+enter.onclick=()=>{
+  const [ar,en]=who.value.split('|');persona={ar,en};
+  $('pick').style.display='none';$('chatScr').style.display='flex';
+  $('av').textContent=ar[0];$('nm').textContent=ar;
+  history=[];chatEl.innerHTML='';
+  add('bot',`أنا ${ar}، أهلاً بيك بموقعنا. بشنو تحب أساعدك؟`);
+  q.focus();
+};
+$('back').onclick=()=>{$('chatScr').style.display='none';$('pick').style.display='flex'};
+
+// =====================================================
+//  قسم الأسئلة والأجوبة — أضف أسئلتك الجديدة هنا
+//  كل سؤال بهالشكل (لا تنسى الفاصلة بالنهاية):
+//  {lang:"ar", q:["صيغة السؤال 1","صيغة السؤال 2"], a:"الجواب"},
+//  lang: "ar" للعربي أو "en" للإنكليزي
+//  q: كل الطرق اللي ممكن المستخدم يسأل بيها نفس السؤال
+//  ممنوع تستخدم علامة " داخل النص، استخدم ' بدالها
+// =====================================================
+const FAQ=[
+{lang:"ar",q:["هلو","مرحبا","اهلا","سلام","هلا"],a:"هلا بيك! اسألني عن الأمن السيبراني أو البرمجة أو الذكاء الاصطناعي، وأنا حاضر."},
+{lang:"ar",q:["شنو هو الفاير وول وكيف يشتغل","الفايروول","الفاير وول","جدار الحماية","firewall"],a:"الـ Firewall (جدار الحماية) مثل حارس على باب الشبكة: يراقب كل البيانات الداخلة والخار
